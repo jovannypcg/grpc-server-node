@@ -1,0 +1,26 @@
+{
+  "name": "grpc-server",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jovannypcg/grpc-server-node.git"
+  },
+  "author": "jovannypcg",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/jovannypcg/grpc-server-node/issues"
+  },
+  "homepage": "https://github.com/jovannypcg/grpc-server-node#readme",
+  "dependencies": {
+    "async": "^1.5.2",
+    "google-protobuf": "^3.0.0",
+    "grpc": "^1.0.0",
+    "lodash": "^4.6.1",
+    "minimist": "^1.2.0"
+  }
+}
