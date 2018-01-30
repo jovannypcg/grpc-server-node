@@ -18,6 +18,7 @@
   },
   "homepage": "https://github.com/jovannypcg/grpc-server-node#readme",
   "dependencies": {
+    "amqplib": "^0.5.2",
     "async": "^1.5.2",
     "debug": "^3.1.0",
     "google-protobuf": "^3.0.0",

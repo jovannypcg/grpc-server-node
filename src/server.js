@@ -5,17 +5,54 @@ const debug = require('debug')('grpc-server');
 const PORT = 5000;
 const HOST = 'localhost';
 const PROTO_PATH = __dirname + '/../proto/services.proto';
+const MSGS_PATH = __dirname + '/../proto/messages.proto';
+
+const AMQP_TAG = " [AMQP *] ===> ";
 
 let grpc = require('grpc');
+let amqp = require('amqplib/callback_api');
+
 let services = grpc.load(PROTO_PATH).services;
+let messages = grpc.load(PROTO_PATH).messages;
+
+const AMQP_QUEUE = 'repository_enrollments';
 
 /**
  * Implements the enroll RPC method.
  */
 function enroll(call, callback) {
-  debug("Call: " + JSON.stringify(call));
-  debug("Callback: " + callback);
+  debug("Request: " + JSON.stringify(call.request));
+
+  let encoded_repository = messages.Repository.encode(call.request);
+  let encoded_buffer = encoded_repository.toBuffer();
+
+  debug("Encoded request: " + JSON.stringify(encoded_repository));
+
+  let decoded_repository = messages.Repository.decode(encoded_repository);
+  debug("Decoded request: " + decoded_repository);
+
+  enqueue(encoded_repository);
+
   callback(null, { ack: true });
+}
+
+function enqueue(encoded_repository) {
+  debug(AMQP_TAG + "Connecting to RabbitMQ...");
+  amqp.connect('amqp://localhost', function(err, conn) {
+    if (null != err) {
+      debug('Failed to connecto to RabbitMQ');
+      return;
+    }
+
+    debug(AMQP_TAG + "Connected!");
+
+    conn.createChannel((err, ch) => {
+      ch.assertQueue(AMQP_QUEUE, { durable: true });
+      ch.sendToQueue(AMQP_QUEUE, encoded_repository.toBuffer());
+
+      debug(AMQP_TAG + "Sending data to RabbitMQ...");
+    });
+  });
 }
 
 /**
