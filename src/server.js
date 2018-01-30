@@ -1,6 +1,6 @@
 'use strict';
 
-const debug = require('debug')('grpc-server')
+const debug = require('debug')('grpc-server');
 
 const PORT = 5000;
 const HOST = 'localhost';
@@ -13,6 +13,8 @@ let services = grpc.load(PROTO_PATH).services;
  * Implements the enroll RPC method.
  */
 function enroll(call, callback) {
+  debug("Call: " + JSON.stringify(call));
+  debug("Callback: " + callback);
   callback(null, { ack: true });
 }
 

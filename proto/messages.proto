@@ -1,9 +1,6 @@
 syntax = "proto3";
 
-option java_multiple_files = true;
-option java_package = "mx.jovannypcg.grpcclient.messages";
-
-package mx.jovannypcg.grpcserver.messages;
+package messages;
 
 message Repository {
     string name = 1;
