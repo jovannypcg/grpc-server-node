@@ -45,10 +45,11 @@ function enqueue(encoded_repository) {
     }
 
     debug(AMQP_TAG + "Connected!");
+    debug(encoded_repository.buffer);
 
     conn.createChannel((err, ch) => {
       ch.assertQueue(AMQP_QUEUE, { durable: true });
-      ch.sendToQueue(AMQP_QUEUE, encoded_repository.toBuffer());
+      ch.sendToQueue(AMQP_QUEUE, encoded_repository.buffer);
 
       debug(AMQP_TAG + "Sending data to RabbitMQ...");
     });

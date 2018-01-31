@@ -25,7 +25,6 @@ const rl = readline.createInterface({
 function main() {
   let exit = false;
 
-  rl.setPrompt('Operation? [S/r/e]: ');
   rl.prompt();
   console.log();
 
@@ -55,7 +54,10 @@ function read() {
 
       debug("#{AMQP_TAG}Waiting for messages in #{AMQP_QUEUE}. To exit press CTRL+C");
       ch.consume(AMQP_QUEUE, function(msg) {
-        debug(AMQP_TAG + "Received " + msg.content.toString);
+        let buffer = new Buffer(msg.content);
+        let decoded_repository = messages.Repository.decode(buffer);
+
+        debug("Decoded repository: " + decoded_repository);
       }, {noAck: true});
     });
   });
